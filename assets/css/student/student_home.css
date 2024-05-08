@@ -1,0 +1,40 @@
+
+      .main{
+          margin-left: 40px;
+          margin-right: 20px;
+         padding-top: 60px;
+          
+      }
+      .search{
+          display: flex;
+          flex-direction: row;
+          margin-right: 10px;
+      }
+      .datasearch{
+          width:15%;
+      }
+      th{
+          background-color:#81d4fa; 
+      }
+      .btnsearch {        
+        background: #6665ee;
+        color: white;
+    }
+    .btnsearch:hover{
+        background: #5757d1;
+        color: white;
+    }
+    .bar{
+        float: right;
+    }
+    a{
+        color: black;
+        text-decoration: none !important;
+    }
+    a:hover{
+        color: black;
+
+    }
+    #example td:hover {
+        cursor: pointer;
+    }

@@ -6,23 +6,23 @@ if(isset($_POST['Sign'])){
     
     $password=md5($_POST['password']);
 
-    $sql="SELECT * FROM users WHERE email='$email'";
+    $sql="SELECT * FROM user WHERE email='$email'";
     $result=mysqli_query($conn,$sql);
     $rowcount=mysqli_num_rows($result);
 
     if($rowcount==1){
-        $sql="SELECT * FROM users WHERE email='$email' AND password='$password'";
+        $sql="SELECT * FROM user WHERE email='$email' AND password='$password'";
         $result=mysqli_query($conn,$sql);
         $rowcount=mysqli_num_rows($result);
 
         if($rowcount==1){
             $data=mysqli_fetch_assoc($result);
-            if($data['usertype']=='Student'){
-                $_SESSION['student_login_id'] = $data['id'];
+            if($data['roleid']=='user'){
+                $_SESSION['roleid'] = $data['id'];
             	header("Location: student/Student_home.php");
 		        exit();
             }else{
-                $_SESSION['teacher_login_id'] = $data['id'];
+                $_SESSION['roleid'] = $data['id'];
             	header("Location: Teacher/dashboard.php");
 		        exit();
             }

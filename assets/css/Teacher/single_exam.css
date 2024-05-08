@@ -1,0 +1,69 @@
+
+      .main{
+          margin-left: 40px;
+          margin-right: 20px;
+         padding-top: 40px;
+          
+      }
+      .control{
+          display: flex;
+          flex-direction: row;
+          margin-right: 10px;
+      }
+      #Question{
+    position: relative;
+    top: 30px;
+
+      }
+      span{
+        color: green;
+      }
+        .group{
+          margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+        }
+        .group span{
+          
+    position: absolute;
+    top: 10px;
+    display:none;
+    right: 15px;
+        }
+        .examname{
+          margin-left: 40px;
+          margin-right: 20px;
+          position: relative;
+          top: 40px;
+          display: flex;
+          flex-direction: column;          
+      }
+      .exam{
+        width: 30%;
+        position: relative;
+        top: 15px;
+        left: 10px;
+
+      }
+      a{
+        color: black;
+      }
+      a:hover{
+        color: black;
+      }
+      .Publish{
+        background-color: #9933CC;
+        color: white;
+      }
+      .Publish:hover{
+        background-color: #9933CC;
+        color: white;
+      }
+      th{
+        background-color: #81d4fa ;
+      }
+     
+          .bar{
+        margin-left: 90%;
+    }
+    

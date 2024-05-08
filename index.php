@@ -1,11 +1,11 @@
 <?php 
 session_start();
-if (isset($_SESSION['teacher_login_id']))
+if (isset($_SESSION['roleid'])) // Changed from 'teacher_login_id' to 'roleid'
 {
   header("Location: Teacher/Teacher_home.php");
   exit();
 }
-if(isset($_SESSION['student_login_id']))
+if(isset($_SESSION['roleid'])) // Changed from 'student_login_id' to 'roleid'
 {
   header("Location: student/Student_home.php");
   exit();

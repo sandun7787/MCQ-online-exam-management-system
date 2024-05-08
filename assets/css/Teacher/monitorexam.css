@@ -1,0 +1,85 @@
+
+      .main{
+          margin-left: 40px;
+          margin-right: 30px;
+         padding-top: 60px;
+          
+      }
+      .examname{
+          margin-left: 40px;
+          margin-right: 20px;
+          position: relative;
+          top: 40px;
+          display: flex;
+          flex-direction: row;
+          
+          
+      }
+     
+      a{
+        color: black;
+      }
+      a:hover{
+        color: black;
+      }
+      .top{
+        position: relative;
+        top: -49px;
+
+      }
+      .Student{
+        font-size: 70px;
+      }
+      .Exam_Completed{
+       padding-bottom: 30px;
+       padding-top: 10px;
+       margin-left: 75px;
+       width: 80%;
+      }
+      .Exam_time{
+       
+       padding-bottom: 30px;
+       padding-top: 10px;
+       margin-left: 75px;
+       margin-top: 15px;
+      }
+      .Student_atten {
+        position: relative;
+    
+      }
+      .group{
+          margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+        }
+        .group span{
+          
+    position: absolute;
+    top: 10px;
+    display:block;
+    right: 15px;
+    color: green;
+        }
+        .a{
+            background-color: aliceblue;
+        }
+        .list{
+            height: 40px;
+            width: 96%;
+            position: relative;
+            left: 10px;
+        }
+        .time{
+            margin-left: 10px;
+        }
+      .btnexam{
+        position: relative;
+        float: right;
+        margin-top: 20px;
+        margin-right: 28px;
+     
+      }
+      .bar{
+        margin-top: 10px;
+        margin-left:80%;
+      }

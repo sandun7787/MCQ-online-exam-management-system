@@ -1,0 +1,40 @@
+.login-form {
+    width: 340px;
+    margin-left: 40%;
+    margin-top: 10%;
+  	font-size: 15px;
+    position: relative;
+}
+.login-form form {
+    margin-bottom: 15px;
+    padding: 30px;
+}
+.login-form h2 {
+    margin: 0 0 15px;
+}
+.form-control, .btn {
+    min-height: 38px;
+    border-radius: 2px;
+}
+.btn {        
+    font-size: 15px;
+    font-weight: bold;
+    background: #6665ee;
+    color: white;
+}
+.btn:hover{
+    background: #5757d1;
+    color: white;
+}
+.form-group {
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+}
+.form-group i {
+   
+    position: absolute;
+    top: 40px;
+    visibility:hidden;
+    right: 10px;
+}

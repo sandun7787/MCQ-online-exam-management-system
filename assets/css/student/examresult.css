@@ -1,0 +1,32 @@
+.Result{
+    position: relative;
+    left: 35%;
+}
+.pass{
+    color: green;
+}
+.Correct{
+    float: right;
+    color: green;
+}
+.wrong{
+    float: right;
+    color:red;
+}
+html, body {
+height: 100%;
+
+
+}
+
+  
+  
+  a{
+    color: black;
+  }
+  a:hover{
+    color: black;
+  }
+.fail {
+    color: red;;
+}
