@@ -7,7 +7,7 @@ if (isset($_SESSION['roleid'])) // Changed from 'teacher_login_id' to 'roleid'
 }
 if(isset($_SESSION['roleid'])) // Changed from 'student_login_id' to 'roleid'
 {
-  header("Location: student/Student_home.php");
+  header("Location: Student/Student_home.php");
   exit();
 }
  ?>
