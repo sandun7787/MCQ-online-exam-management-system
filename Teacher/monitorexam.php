@@ -4,8 +4,7 @@ session_start();
 require '../database_connection.php'; 
 
 //teacher auth
-if (!isset($_SESSION['teacher_login_id']))
-{
+if (!isset($_SESSION['roleid']) || $_SESSION['roleid'] != 1) {
   header("Location: ../index.php?error=You Need To Login First");
   exit();
 }
@@ -40,12 +39,13 @@ if(isset($_GET['id'])){
   }
 //calculate Number of student
 $noofstudent=0;
-$countstudent="SELECT COUNT(id)FROM `role` WHERE usertype='Student'";
+$countstudent="SELECT COUNT(id) FROM `user` WHERE roleid=2";
 $CountStudentResult=mysqli_query($conn,$countstudent);
 if($CountStudentResult->num_rows>0){
     $studentdata=$CountStudentResult->fetch_assoc();
     $noofstudent=$studentdata['COUNT(id)'];
 }
+
 //Calculate no atten student
 $NoAttenStudents=0;
 $Query="SELECT COUNT(id) FROM `examenrollment` WHERE Exam_id='$_GET[id]'";
@@ -62,9 +62,10 @@ $end_time=date('Y-m-d H:i:s',strtotime('+'.$_SESSION["duration"].' minute',strto
 $_SESSION["end_time"]=$end_time;
 
 
-$userdata="SELECT * FROM mcqsystem.users where user_login_id='$_SESSION[teacher_login_id]'";
-$userresult=mysqli_query($conn,$userdata);
-$userdetails=mysqli_fetch_assoc($userresult);
+$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid = 1";
+$userresult = mysqli_query($conn, $userdata);
+$userdetails = mysqli_fetch_assoc($userresult);
+
 ?>
 
 <!DOCTYPE html>
@@ -149,9 +150,9 @@ $userdetails=mysqli_fetch_assoc($userresult);
             <?php
             require '../database_connection.php';
 
-            $sql = "SELECT * FROM users WHERE usertype='Student'";
+            $sql = "SELECT * FROM user WHERE roleid = 2";
             $sqlresult = $conn->query($sql);
-
+            
             if ($sqlresult === false) {
                 // Query execution failed
                 echo "Error executing query: " . $conn->error;
@@ -159,7 +160,7 @@ $userdetails=mysqli_fetch_assoc($userresult);
                 if ($sqlresult->num_rows > 0) {
                     while ($studentdata = $sqlresult->fetch_assoc()) {
                         echo '<div class="p-2 group shadow-sm list content">' . $studentdata['name'];
-                        $studentId = $studentdata['user_login_id'];
+                        $studentId = $studentdata['roleid'];
                         $examId = $_GET['id']; // Ensure to sanitize input if necessary
                         $sq2 = "SELECT * FROM examenrollment WHERE student_id = $studentId AND Exam_id = $examId AND Examstatus = 'attended'";
                         $sqlresult1 = $conn->query($sq2);
@@ -177,6 +178,7 @@ $userdetails=mysqli_fetch_assoc($userresult);
                     echo "No students found.";
                 }
             }
+            
             ?>
         </div>
     </div>
