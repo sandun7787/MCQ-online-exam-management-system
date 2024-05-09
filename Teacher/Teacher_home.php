@@ -9,10 +9,15 @@ if (!isset($_SESSION['roleid']))
   header("Location: ../index.php?error=You Need To Login First");
   exit();
 }
-$userdata="SELECT * FROM mcqsystem1.user where roleid='$_SESSION[roleid]'";
-$userresult=mysqli_query($conn,$userdata);
-$userdetails=mysqli_fetch_assoc($userresult);
- ?>
+$teacherRoleId = 1; // Assuming teacher role ID is 1
+$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid=?";
+$stmt = $conn->prepare($userdata);
+$stmt->bind_param("i", $teacherRoleId);
+$stmt->execute();
+$userresult = $stmt->get_result();
+$userdetails = $userresult->fetch_assoc();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
