@@ -4,7 +4,7 @@ session_start();
 //include database connection
 require '../database_connection.php';
 //user auth
-if (!isset($_SESSION['student_login_id']))
+if (!isset($_SESSION['roleid']))
 {
   header("Location: ../index.php?error=You Need To Login First");
   exit();
@@ -16,7 +16,7 @@ if (!isset($_SESSION["examid"]))
   exit();
 }
 //save the already saved exam
-$sql="SELECT * FROM `examenrollment` WHERE  student_id='$_SESSION[student_login_id]' AND Exam_id='$_SESSION[examid]'";
+$sql="SELECT * FROM `examenrollment` WHERE  student_id='$_SESSION[roleid]' AND Exam_id='$_SESSION[examid]'";
 $result=mysqli_query($conn,$sql);
 if($result->num_rows > 0)
 {
@@ -74,7 +74,7 @@ if($result->num_rows > 0)
               $mark="fail";
            }
            $sql3="INSERT INTO `student-answers`(`option_id`, `question_id`, `student_id`, `exam_id`, `question_result`) 
-           VALUES ('$optionID','$questionID','$_SESSION[student_login_id]','$_SESSION[examid])','$mark')";
+           VALUES ('$optionID','$questionID','$_SESSION[roleid]','$_SESSION[examid])','$mark')";
            if ($conn->query($sql3) === TRUE) {
               echo "New record created successfully";
             } else {
@@ -95,7 +95,7 @@ if($result->num_rows > 0)
 else
 {
   $sqlFisrt="INSERT INTO `examenrollment`(`student_id`, `Exam_id`, `Examstatus`) 
-VALUES ('$_SESSION[student_login_id]','$_SESSION[examid]','draft')";
+VALUES ('$_SESSION[roleid]','$_SESSION[examid]','draft')";
 if ($conn->query($sqlFisrt) === TRUE) 
 {
 $question_an = $_POST['id'];
@@ -124,7 +124,7 @@ foreach($c as $qus=>$ans){
             $mark="fail";
          }
          $sql3="INSERT INTO `student-answers`(`option_id`, `question_id`, `student_id`, `exam_id`, `question_result`) 
-         VALUES ('$optionID','$questionID','$_SESSION[student_login_id]','$_SESSION[examid])','$mark')";
+         VALUES ('$optionID','$questionID','$_SESSION[roleid]','$_SESSION[examid])','$mark')";
          if ($conn->query($sql3) === TRUE) {
             echo "New record created successfully";
           } else {
