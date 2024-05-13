@@ -4,20 +4,15 @@ session_start();
 require '../database_connection.php';
 
 //teacher auth
-if (!isset($_SESSION['roleid']))
+if (!isset($_SESSION['teacher_login_id']))
 {
   header("Location: ../index.php?error=You Need To Login First");
   exit();
 }
-$teacherRoleId = 1; // Assuming teacher role ID is 1
-$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid=?";
-$stmt = $conn->prepare($userdata);
-$stmt->bind_param("i", $teacherRoleId);
-$stmt->execute();
-$userresult = $stmt->get_result();
-$userdetails = $userresult->fetch_assoc();
-?>
-
+$userdata="SELECT * FROM exam.users where id='$_SESSION[teacher_login_id]'";
+$userresult=mysqli_query($conn,$userdata);
+$userdetails=mysqli_fetch_assoc($userresult);
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,9 +81,9 @@ $userdetails = $userresult->fetch_assoc();
                   <tbody id="jar">
                   <?php 
                   require('../database_connection.php');
-                  $sql = "SELECT * FROM `exams` WHERE teacherid='$_SESSION[roleid]'";
+                  $sql = "SELECT * FROM `exams` WHERE teacherid='$_SESSION[teacher_login_id]'";
                   if(isset($_POST['search'])){
-                    $sql="SELECT * FROM `exams` WHERE teacherid='$_SESSION[roleid]' and name LIKE '%$_POST[searchvalue]%'";
+                    $sql="SELECT * FROM `exams` WHERE teacherid='$_SESSION[teacher_login_id]' and name LIKE '%$_POST[searchvalue]%'";
                   }
                   $result=mysqli_query($conn,$sql);
                   if($result->num_rows > 0)

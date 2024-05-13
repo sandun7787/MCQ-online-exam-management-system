@@ -1,13 +1,13 @@
 <?php 
 session_start();
-if (isset($_SESSION['roleid'])) // Changed from 'teacher_login_id' to 'roleid'
+if (isset($_SESSION['teacher_login_id']))
 {
   header("Location: Teacher/Teacher_home.php");
   exit();
 }
-if(isset($_SESSION['roleid'])) // Changed from 'student_login_id' to 'roleid'
+if(isset($_SESSION['student_login_id']))
 {
-  header("Location: Student/Student_home.php");
+  header("Location: student/Student_home.php");
   exit();
 }
  ?>
