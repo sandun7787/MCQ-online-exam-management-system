@@ -16,7 +16,7 @@ if ($_POST['main_id'] == 0) {
   $examdate = $_POST['examdatetime'];
 
   $sql = "INSERT INTO `exams`(`name`, `dateandtime`, `duration`, `teacherid`, `status`) 
-  VALUES ('$ExamName','$examdate','$duration','$_SESSION[teacher_login_id]','published')";
+  VALUES ('$ExamName','$examdate','$duration','$_SESSION[roleid]','published')";
   $result = mysqli_query($conn, $sql);
   $ex_id = mysqli_insert_id($conn);
 
