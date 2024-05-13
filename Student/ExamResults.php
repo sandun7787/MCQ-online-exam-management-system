@@ -150,7 +150,7 @@ if ($sql1result === false) {
     if ($sql1result->num_rows > 0) {
         while ($row = $sql1result->fetch_assoc()) {
             echo '<div class="p-2 group w-75 ml-5 mb-2 mt-2 shadow-sm list content">Question ' . $row['questionNo'];
-            $sql2 = "SELECT * FROM `mcqsystem`.`student-answers` WHERE student_id = $_SESSION[student_login_id] AND question_id = $row[id] AND exam_id = '$_SESSION[examid]'";
+            $sql2 = "SELECT * FROM `mcqsystem1`.`student-answers` WHERE student_id = $_SESSION[roleid] AND question_id = $row[id] AND exam_id = '$_SESSION[examid]'";
             $sql2result = $conn->query($sql2);
 
             if ($sql2result === false) {
