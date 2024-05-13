@@ -1,30 +1,40 @@
 <?php 
 session_start();
-//include database connection
+
+// Include database connection
 require '../database_connection.php'; 
-//user authentication
-if (!isset($_SESSION['roleid']))
-{
-  header("Location: ../index.php?error=You Need To Login First");
-  exit();
+
+// User authentication
+if (!isset($_SESSION['roleid']) || $_SESSION['roleid'] != 2) { // Assuming roleid 2 is for students
+    header("Location: ../index.php?error=You Need To Login First");
+    exit();
 }
-//get the exam id using get method
+
+// Get the exam id using GET method
 if(isset($_GET['exid'])){
-    $sql = "SELECT * FROM `exams` WHERE id='$_GET[exid]'";
+    $exam_id = $_GET['exid']; // Sanitize or validate the input here
+    $sql = "SELECT * FROM `exams` WHERE id='$exam_id'";
     $result = $conn->query($sql);
-    $exam = $result->fetch_assoc();
-//store exam details in session varible
-    $_SESSION["name"] = $exam['name'];
-    $_SESSION["examid"] = "$_GET[exid]";
-    
-  }
-  //get the result of student from database
-  $selectResult="SELECT * FROM `examenrollment` WHERE student_id='$_SESSION[roleid]' AND Exam_id='$_SESSION[examid]'";
-  $sresult = $conn->query($selectResult);
-  $resultdata = $sresult->fetch_assoc();
-  //store exam mark of this student
-  $marks=(int)$resultdata['result'];
-  $state;
+    if ($result && $exam = $result->fetch_assoc()) {
+        // Store exam details in session variable
+        $_SESSION["name"] = $exam['name'];
+        $_SESSION["examid"] = $exam_id;
+    } else {
+        // Handle if the exam doesn't exist
+    }
+}
+
+// Get the result of student from the database
+$selectResult = "SELECT * FROM `examenrollment` WHERE student_id='{$_SESSION['roleid']}' AND Exam_id='{$_SESSION['examid']}'";
+$sresult = $conn->query($selectResult);
+if ($sresult && $resultdata = $sresult->fetch_assoc()) {
+    // Store exam mark of this student
+    $marks = (int)$resultdata['result'];
+    $state = "Some state value"; // Assign some value to $state if needed
+} else {
+    // Handle if the result doesn't exist
+}
+
 //exam result calculation
   if ($marks>85)
   {
@@ -52,18 +62,18 @@ if(isset($_GET['exid'])){
       $state="Failed";
   }
 
+// Fetch user details if roleid is 2 (assuming roleid 2 is for students)
+if ($_SESSION['roleid'] == 2) {
+    $userdata = "SELECT * FROM mcqsystem1.user WHERE roleid='" . $_SESSION['roleid'] . "'";
+    $userresult = mysqli_query($conn, $userdata);
+    
+    if (!$userresult) {
+        die("Query failed: " . mysqli_error($conn));
+    }
+    
+    $userdetails = mysqli_fetch_assoc($userresult);
+}
 
-  $userdata = "SELECT * FROM mcqsystem.users WHERE user_login_id='" . $_SESSION['student_login_id'] . "'";
-  //echo "SQL query: " . $userdata; 
-  
-  $userresult = mysqli_query($conn, $userdata);
-  
-  if (!$userresult) {
-      die("Query failed: " . mysqli_error($conn));
-  }
-  
-  $userdetails = mysqli_fetch_assoc($userresult);
-  
 
  ?>
 <!DOCTYPE html>
