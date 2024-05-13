@@ -6,7 +6,7 @@ session_start();
 require '../database_connection.php';
 
 // User auth
-if (!isset($_SESSION['student_login_id'])) {
+if (!isset($_SESSION['roleid'])) {
     header("Location: ../index.php?error=You Need To Login First");
     exit();
 }
@@ -18,7 +18,7 @@ if (!isset($_SESSION["examid"])) {
 }
 
 // Get Exam Details Of Student
-$sql = "SELECT * FROM `examenrollment` WHERE  student_id='{$_SESSION['student_login_id']}' AND Exam_id='{$_SESSION['examid']}'";
+$sql = "SELECT * FROM `examenrollment` WHERE  student_id='{$_SESSION['roleid']}' AND Exam_id='{$_SESSION['examid']}'";
 $result = mysqli_query($conn, $sql);
 
 if ($result->num_rows > 0) {
@@ -36,7 +36,7 @@ if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
                 $questionID = $row['id'];
 
-                $sqlnew = "SELECT * FROM `student-answers` WHERE  question_id='$questionID' AND student_id='{$_SESSION['student_login_id']}'";
+                $sqlnew = "SELECT * FROM `student-answers` WHERE  question_id='$questionID' AND student_id='{$_SESSION['roleid']}'";
                 $resultnew = $conn->query($sqlnew);
 
                 if ($resultnew->num_rows > 0) {
@@ -50,7 +50,7 @@ if ($result->num_rows > 0) {
                         $answercheck = $row1['iscoorect'];
                         $mark = ($answercheck == 1) ? "Pass" : "Fail";
 
-                        $sql3 = "UPDATE `student-answers` SET `option_id`='$optionID', `question_result`='$mark' WHERE student_id='{$_SESSION['student_login_id']}' AND question_id='$questionID'";
+                        $sql3 = "UPDATE `student-answers` SET `option_id`='$optionID', `question_result`='$mark' WHERE student_id='{$_SESSION['roleid']}' AND question_id='$questionID'";
                         
                         if ($conn->query($sql3) === TRUE) {
                             echo "Record updated successfully";
@@ -69,7 +69,7 @@ if ($result->num_rows > 0) {
                         $answercheck = $row1['iscoorect'];
                         $mark = ($answercheck == 1) ? "Pass" : "Fail";
 
-                        $sql3 = "INSERT INTO `student-answers`(`option_id`, `question_id`, `student_id`, `exam_id`, `question_result`) VALUES ('$optionID', '$questionID', '{$_SESSION['student_login_id']}', '{$_SESSION['examid']}', '$mark')";
+                        $sql3 = "INSERT INTO `student-answers`(`option_id`, `question_id`, `student_id`, `exam_id`, `question_result`) VALUES ('$optionID', '$questionID', '{$_SESSION['roleid']}', '{$_SESSION['examid']}', '$mark')";
                         
                         if ($conn->query($sql3) === TRUE) {
                             echo "New record created successfully";
@@ -89,7 +89,7 @@ if ($result->num_rows > 0) {
     $no_of_question = (int)$data['noofquestion'];
     $markperquestion = (100 / $no_of_question);
 
-    $count_correct = "SELECT COUNT(id) AS nocorrect FROM `student-answers` WHERE student_id='{$_SESSION['student_login_id']}' AND exam_id='{$_SESSION['examid']}' AND question_result='Pass'";
+    $count_correct = "SELECT COUNT(id) AS nocorrect FROM `student-answers` WHERE student_id='{$_SESSION['roleid']}' AND exam_id='{$_SESSION['examid']}' AND question_result='Pass'";
     $no_correct_result = mysqli_query($conn, $count_correct);
     $data1 = $no_correct_result->fetch_assoc();
     $no_of_correct = (int)$data1['nocorrect'];
@@ -113,7 +113,7 @@ if ($result->num_rows > 0) {
         $state = "Failed";
     }
 
-    $updateExamResult = "UPDATE `examenrollment` SET `Examstatus`='attended',`result`='$exam_totall_marks',`GRADE`='$grade',`ExamResult`='$state' WHERE student_id='{$_SESSION['student_login_id']}' AND Exam_id='{$_SESSION['examid']}'";
+    $updateExamResult = "UPDATE `examenrollment` SET `Examstatus`='attended',`result`='$exam_totall_marks',`GRADE`='$grade',`ExamResult`='$state' WHERE student_id='{$_SESSION['roleid']}' AND Exam_id='{$_SESSION['examid']}'";
     
     if ($conn->query($updateExamResult) === TRUE) {
         echo "Exam result updated successfully";
@@ -122,7 +122,7 @@ if ($result->num_rows > 0) {
     }
 } else {
     // Complete without saved Exam
-    $sqlFisrt = "INSERT INTO `examenrollment`(`student_id`, `Exam_id`, `Examstatus`) VALUES ('{$_SESSION['student_login_id']}', '{$_SESSION['examid']}', 'attended')";
+    $sqlFisrt = "INSERT INTO `examenrollment`(`student_id`, `Exam_id`, `Examstatus`) VALUES ('{$_SESSION['roleid']}', '{$_SESSION['examid']}', 'attended')";
 
     if ($conn->query($sqlFisrt) === TRUE) {
         $question_an = $_POST['id'];
@@ -146,7 +146,7 @@ if ($result->num_rows > 0) {
                     $answercheck = $row1['iscoorect'];
                     $mark = ($answercheck == 1) ? "Pass" : "Fail";
 
-                    $sql3 = "INSERT INTO `student-answers`(`option_id`, `question_id`, `student_id`, `exam_id`, `question_result`) VALUES ('$optionID', '$questionID', '{$_SESSION['student_login_id']}', '{$_SESSION['examid']}', '$mark')";
+                    $sql3 = "INSERT INTO `student-answers`(`option_id`, `question_id`, `student_id`, `exam_id`, `question_result`) VALUES ('$optionID', '$questionID', '{$_SESSION['roleid']}', '{$_SESSION['examid']}', '$mark')";
 
                     if ($conn->query($sql3) === TRUE) {
                         echo "New record created successfully";
@@ -164,7 +164,7 @@ if ($result->num_rows > 0) {
         $no_of_question = (int)$data['noofquestion'];
         $markperquestion = (100 / $no_of_question);
 
-        $count_correct = "SELECT COUNT(id) AS nocorrect FROM `student-answers` WHERE student_id='{$_SESSION['student_login_id']}' AND exam_id='{$_SESSION['examid']}' AND question_result='Pass'";
+        $count_correct = "SELECT COUNT(id) AS nocorrect FROM `student-answers` WHERE student_id='{$_SESSION['roleid']}' AND exam_id='{$_SESSION['examid']}' AND question_result='Pass'";
         $no_correct_result = mysqli_query($conn, $count_correct);
         $data1 = $no_correct_result->fetch_assoc();
         $no_of_correct = (int)$data1['nocorrect'];
@@ -188,7 +188,7 @@ if ($result->num_rows > 0) {
             $state = "Failed";
         }
 
-        $updateExamResult = "UPDATE `examenrollment` SET `Examstatus`='attended',`result`='$exam_totall_marks',`GRADE`='$grade',`ExamResult`='$state' WHERE student_id='{$_SESSION['student_login_id']}' AND Exam_id='{$_SESSION['examid']}'";
+        $updateExamResult = "UPDATE `examenrollment` SET `Examstatus`='attended',`result`='$exam_totall_marks',`GRADE`='$grade',`ExamResult`='$state' WHERE student_id='{$_SESSION['roleid']}' AND Exam_id='{$_SESSION['examid']}'";
         
         if ($conn->query($updateExamResult) === TRUE) {
             echo "Exam result updated successfully";
