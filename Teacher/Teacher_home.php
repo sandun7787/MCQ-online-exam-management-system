@@ -10,7 +10,7 @@ if (!isset($_SESSION['roleid']))
   exit();
 }
 $teacherRoleId = 1; // Assuming teacher role ID is 1
-$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid=?";
+$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid=? AND id";
 $stmt = $conn->prepare($userdata);
 $stmt->bind_param("i", $teacherRoleId);
 $stmt->execute();

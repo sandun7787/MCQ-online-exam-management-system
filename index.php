@@ -1,16 +1,17 @@
 <?php 
 session_start();
-if (isset($_SESSION['roleid'])) // Changed from 'teacher_login_id' to 'roleid'
-{
-  header("Location: Teacher/Teacher_home.php");
-  exit();
+
+// Check if a user is already logged in and redirect them accordingly
+if (isset($_SESSION['roleid'])) {
+    if ($_SESSION['roleid'] == 1) {
+        header("Location: Teacher/Teacher_home.php");
+        exit();
+    } elseif ($_SESSION['roleid'] == 2) {
+        header("Location: student/Student_home.php");
+        exit();
+    }
 }
-if(isset($_SESSION['roleid'])) // Changed from 'student_login_id' to 'roleid'
-{
-  header("Location: Student/Student_home.php");
-  exit();
-}
- ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
