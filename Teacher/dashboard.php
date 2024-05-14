@@ -29,7 +29,7 @@ $c=array();
 $d=array();
 $e=array();
 $totall=0;
-$PI="SELECT COUNT(id) as no,grade FROM `examenrollment` GROUP BY grade ORDER BY grade ASC";
+$PI="SELECT COUNT(id) as no,GRADE FROM `examenrollment` GROUP BY grade ORDER BY grade ASC";
 $PIresult=mysqli_query($conn,$PI);
 while($value=mysqli_fetch_assoc($PIresult))
 {
@@ -146,7 +146,7 @@ $userdetails=mysqli_fetch_assoc($userresult);
                                 <?php
                                 require('../database_connection.php');
 
-                                $sql = "SELECT users.name as name, exams.name as exam ,examenrollment.result as result FROM examenrollment JOIN users ON examenrollment.student_id = users.user_login_id JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[teacher_login_id] ORDER BY examenrollment.result DESC,examenrollment.Exam_id ASC;";
+                                $sql = "SELECT users.name as name, exams.name as exam ,examenrollment.result as result FROM examenrollment JOIN users ON examenrollment.student_id = users.id JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[teacher_login_id] ORDER BY examenrollment.result DESC,examenrollment.Exam_id ASC;";
                                 $result = mysqli_query($conn, $sql);
 
                                 if (!$result) {
@@ -189,7 +189,7 @@ $userdetails=mysqli_fetch_assoc($userresult);
                                 <tbody id="jar">
                                 <?php 
                                 require('../database_connection.php');
-                                $sql = "SELECT users.name as name, exams.name as exam , examenrollment.result as result FROM examenrollment JOIN users ON examenrollment.student_id = users.user_login_id JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[teacher_login_id] ORDER BY examenrollment.result ASC,examenrollment.Exam_id ASC;";
+                                $sql = "SELECT users.name as name, exams.name as exam , examenrollment.result as result FROM examenrollment JOIN users ON examenrollment.student_id = users.id JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[teacher_login_id] ORDER BY examenrollment.result ASC,examenrollment.Exam_id ASC;";
                                 $result=mysqli_query($conn,$sql);
                                 if($result->num_rows > 0)
                                 {
