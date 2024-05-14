@@ -89,7 +89,7 @@ $userdetails = mysqli_fetch_assoc($userresult);
           </button>
           <ul class="navbar-nav align-items-center">
                 <li class="nav-item ">
-                  <a class="nav-link" href="dashboard.php">Dashboard </a>
+                  <a class="nav-link" href="Dashboard.php">Dashboard </a>
                 </li>
                 <li class="nav-item active">
                   <a class="nav-link" href="student_home.php">Exams<span class="sr-only">(current)</span></a>
