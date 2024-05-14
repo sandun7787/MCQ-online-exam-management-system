@@ -18,12 +18,14 @@
 session_start();
 require '../database_connection.php';
 
-if (!isset($_SESSION['roleid']) || $_SESSION['roleid'] != 2) {
+if (!isset($_SESSION['student_login_id']))
+{
   header("Location: ../index.php?error=You Need To Login First");
   exit();
 }
 
-$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid='" . $_SESSION['roleid'] . "'";
+$userdata = "SELECT * FROM exam.users WHERE id='" . $_SESSION['student_login_id'] . "'";
+
 
 $userresult = mysqli_query($conn, $userdata);
 
@@ -33,23 +35,23 @@ if (!$userresult) {
 
 $userdetails = mysqli_fetch_assoc($userresult);
 
-if(isset($_GET['error'])){
-    $errorMessage = $_GET['error'];
-    echo "<script>
-            Swal.fire({
-              title: 'Exam Time!',
-              icon: 'warning',
-              text: '$errorMessage',
-              confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.assign('Student_home.php');
-                } 
-            });
-          </script>";
-}
-?>
 
+
+if(isset($_GET['error'])){
+echo"<script>Swal.fire({
+  title: 'Exam Time!',
+  icon: 'warning',
+  text: '$_GET[error]',
+  confirmButtonText: 'OK',
+   
+  }).then((result) => {
+  if (result.isConfirmed) {
+    window.location.assign('Student_home.php')
+  } 
+  })</script>";
+
+}
+ ?>
 <nav class="shadow-sm navbar navbar-expand-lg navbar-light bg-ligh bg-white rounded">
   <a class="navbar-brand" href="#">SCHOOL MCQ ONLINE APPLICATION</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,13 +96,12 @@ if(isset($_GET['error'])){
               <?php 
 require('../database_connection.php');
 
-$sql1 = "SELECT exams.id AS id, exams.status As status, exams.name AS name, exams.dateandtime AS dateandtime, exams.duration AS duration, examenrollment.Examstatus AS Examstatus FROM mcqsystem1.exams LEFT JOIN mcqsystem1.examenrollment ON mcqsystem1.exams.id = mcqsystem1.examenrollment.Exam_id AND (mcqsystem1.examenrollment.student_id = '{$_SESSION['roleid']}' OR mcqsystem1.examenrollment.student_id IS NULL) WHERE mcqsystem1.exams.status = 'End' or mcqsystem1.exams.status='published' ORDER BY exams.dateandtime DESC";
-
+$sql1 = "SELECT exams.id AS id, exams.status As status, exams.name AS name, exams.dateandtime AS dateandtime, exams.duration AS duration, examenrollment.Examstatus AS Examstatus FROM exam.exams LEFT JOIN exam.examenrollment ON exam.exams.id = exam.examenrollment.Exam_id AND (exam.examenrollment.student_id ='$_SESSION[student_login_id]' OR exam.examenrollment.student_id IS NULL) WHERE exam.exams.status = 'End'or exam.exams.status='published' ORDER BY exams.dateandtime DESC";
 
 if(isset($_POST['search'])) {
     $searchvalue = $_POST['searchvalue'];
     // Prevent SQL injection by using prepared statements
-    $sql1 = "SELECT exams.id AS id, exams.name AS name, exams.dateandtime AS dateandtime, exams.duration AS duration, examenrollment.Examstatus AS Examstatus FROM mcqsystem.exams LEFT JOIN mcqsystem.examenrollment ON mcqsystem.exams.id = mcqsystem.examenrollment.Exam_id AND (mcqsystem.examenrollment.student_id = 1 OR mcqsystem.examenrollment.student_id IS NULL) WHERE mcqsystem.exams.status = 'published' AND exams.name LIKE ? ORDER BY exams.dateandtime DESC";
+    $sql1 = "SELECT exams.id AS id, exams.name AS name, exams.dateandtime AS dateandtime, exams.duration AS duration, examenrollment.Examstatus AS Examstatus FROM exam.exams LEFT JOIN exam.examenrollment ON exam.exams.id = exam.examenrollment.Exam_id AND (exam.examenrollment.student_id = 1 OR exam.examenrollment.student_id IS NULL) WHERE exam.exams.status = 'published' AND exams.name LIKE ? ORDER BY exams.dateandtime DESC";
     $stmt = $conn->prepare($sql1);
     $stmt->bind_param("s", $searchvalue);
     $stmt->execute();
@@ -134,24 +135,18 @@ if(mysqli_num_rows($result1) > 0) {
           }
           echo "</td>";
       }
-     // Check if the 'status' key is set in the $row array
-if (isset($row['status'])) {
-    // Check the value of the 'status' key
-    if ($row['status'] == Null) {
-        echo "<td><a href='SingleExam.php?id={$row['id']}&status={$row['status']}'>pending</a></td>";
-    } else if ($row['status'] == 'End') {
-        echo "<td>End</td>"; // Display "End" instead of a link
-    } else if ($row['status'] == 'Stop') {
-        echo "<td>Stop</td>"; // Display "Stop" instead of a link
-    } else {
-        echo "<td><a href='SingleExam.php?id={$row['id']}&status={$row['Examstatus']}'>{$row['Examstatus']}</a></td>";
-    }
-} else {
-    // Handle the case where 'status' key is not set
-    echo "<td>Status Not Available</td>";
-}
-echo "</tr>";
-
+      
+      // Check if the exam status is "End" or "Stop" to disable the link
+      if (isset($row['status']) && $row['status'] == null) {
+          echo "<td><a href='SingleExam.php?id={$row['id']}&status={$row['status']}'>pending</a></td>";
+      } else if (isset($row['status']) && $row['status'] == 'End') {
+          echo "<td>End</td>"; // Display "End" instead of a link
+      } else if (isset($row['status']) && $row['status'] == 'Stop') {
+          echo "<td>Stop</td>"; // Display "Stop" instead of a link
+      } else {
+          echo "<td><a href='SingleExam.php?id={$row['id']}&status={$row['Examstatus']}'>{$row['Examstatus']}</a></td>";
+      }  
+      echo "</tr>";
   }
   echo "</tbody></table><nav class='bar'><ul class='pagination justify-content-center pagination-sm'></ul></nav>";
 } else {

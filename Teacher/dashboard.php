@@ -1,82 +1,67 @@
-<?php
+<?php 
 session_start();
-// Include database connection
-require '../database_connection.php';
+//include database connection
+require '../database_connection.php'; 
 
-// Teacher authentication
-if (!isset($_SESSION['roleid']) || $_SESSION['roleid'] != 1) {
-    header("Location: ../index.php?error=You Need To Login First");
-    exit();
+//teacher auth
+if (!isset($_SESSION['teacher_login_id']))
+{
+  header("Location: ../index.php?error=You Need To Login First");
+  exit();
+}
+//get this teacher create Exam
+$query = $conn->query("SELECT * FROM `exams` WHERE teacherid='$_SESSION[teacher_login_id]' AND status='published' ORDER BY id ASC");
+$Exam[]=array();
+foreach($query as $data)
+{
+$Exam[] = $data['name'];
+}
+//get Totall Students
+$query1 = $conn->query("SELECT * FROM `exams` WHERE teacherid='$_SESSION[teacher_login_id]' AND status='published'");
+
+foreach($query1 as $data)
+{
+//$TotallStudent[] = $data['student'];
+}
+$a=array();
+$b=array();
+$c=array();
+$d=array();
+$e=array();
+$totall=0;
+$PI="SELECT COUNT(id) as no,grade FROM `examenrollment` GROUP BY grade ORDER BY grade ASC";
+$PIresult=mysqli_query($conn,$PI);
+while($value=mysqli_fetch_assoc($PIresult))
+{
+  array_push($a,$value['no']);
+  array_push($c,$value['GRADE']);
+  $totall+=$value['no'];
+}
+foreach ($a as $value) {
+  $z=($value/$totall)*100;
+  array_push($b,$z);
+
 }
 
-// Get exams created by this teacher
-$query = $conn->query("SELECT * FROM `exams` WHERE teacherid='$_SESSION[roleid]' AND status='published' ORDER BY id ASC");
-$Exam = array();
-if ($query) {
-    foreach ($query as $data) {
-        $Exam[] = $data['name'];
-    }
-} else {
-    echo "Error: " . $conn->error;
+
+$studentchart="SELECT count(id) ,examenrollment.exam_id from exam.examenrollment group by exam_id  order by exam_id asc";
+$studentchartR=mysqli_query($conn,$studentchart);
+while($value=mysqli_fetch_assoc($studentchartR))
+{
+  array_push($d,$value['count(id)']);
 }
 
-// Get total students
-$query1 = $conn->query("SELECT * FROM `exams` WHERE teacherid='$_SESSION[roleid]' AND status='published'");
-// Initialize arrays and variables
-$a = array();
-$b = array();
-$c = array();
-$d = array();
-$e = array();
-$totall = 0;
 
-// Calculate average result grade percentages
-$PI = "SELECT COUNT(id) as no, GRADE FROM `examenrollment` GROUP BY GRADE ORDER BY GRADE ASC";
-$PIresult = mysqli_query($conn, $PI);
-if ($PIresult) {
-    while ($value = mysqli_fetch_assoc($PIresult)) {
-        array_push($a, $value['no']);
-        array_push($c, $value['GRADE']);
-        $totall += $value['no'];
-    }
-    foreach ($a as $value) {
-        $z = ($value / $totall) * 100;
-        array_push($b, $z);
-    }
-} else {
-    echo "Error: " . mysqli_error($conn);
+$examchart="SELECT * FROM exam.examenrollment inner join exams on examenrollment.Exam_id=exams.id group by examenrollment.exam_id order by examenrollment.exam_id asc";
+$examchartR=mysqli_query($conn,$examchart);
+while($value=mysqli_fetch_assoc($examchartR))
+{
+  array_push($e,$value['name']);
 }
 
-// Fetch student enrollment data for charts
-$studentchart = "SELECT count(id) ,examenrollment.Exam_id FROM mcqsystem1.examenrollment GROUP BY Exam_id ORDER BY Exam_id ASC";
-$studentchartR = mysqli_query($conn, $studentchart);
-if ($studentchartR) {
-    while ($value = mysqli_fetch_assoc($studentchartR)) {
-        array_push($d, $value['count(id)']);
-    }
-} else {
-    echo "Error: " . mysqli_error($conn);
-}
-
-// Fetch exam data for charts
-$examchart = "SELECT * FROM mcqsystem1.examenrollment INNER JOIN exams ON examenrollment.Exam_id=exams.id GROUP BY examenrollment.Exam_id ORDER BY examenrollment.Exam_id ASC";
-$examchartR = mysqli_query($conn, $examchart);
-if ($examchartR) {
-    while ($value = mysqli_fetch_assoc($examchartR)) {
-        array_push($e, $value['name']);
-    }
-} else {
-    echo "Error: " . mysqli_error($conn);
-}
-
-// Fetch user data
-$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid='$_SESSION[roleid]'";
-$userresult = mysqli_query($conn, $userdata);
-if ($userresult) {
-    $userdetails = mysqli_fetch_assoc($userresult);
-} else {
-    echo "Error: " . mysqli_error($conn);
-}
+$userdata="SELECT * FROM exam.users where id='$_SESSION[teacher_login_id]'";
+$userresult=mysqli_query($conn,$userdata);
+$userdetails=mysqli_fetch_assoc($userresult);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,7 +146,7 @@ if ($userresult) {
                                 <?php
                                 require('../database_connection.php');
 
-                                $sql = "SELECT user.name as name, exams.name as exam ,examenrollment.result as result FROM examenrollment JOIN user ON examenrollment.student_id = user.roleid JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[roleid] ORDER BY examenrollment.result DESC,examenrollment.Exam_id ASC;";
+                                $sql = "SELECT users.name as name, exams.name as exam ,examenrollment.result as result FROM examenrollment JOIN users ON examenrollment.student_id = users.user_login_id JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[teacher_login_id] ORDER BY examenrollment.result DESC,examenrollment.Exam_id ASC;";
                                 $result = mysqli_query($conn, $sql);
 
                                 if (!$result) {
@@ -204,7 +189,7 @@ if ($userresult) {
                                 <tbody id="jar">
                                 <?php 
                                 require('../database_connection.php');
-                                $sql = "SELECT user.name as name, exams.name as exam , examenrollment.result as result FROM examenrollment JOIN user ON examenrollment.student_id = user.roleid JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[roleid] ORDER BY examenrollment.result ASC,examenrollment.Exam_id ASC;";
+                                $sql = "SELECT users.name as name, exams.name as exam , examenrollment.result as result FROM examenrollment JOIN users ON examenrollment.student_id = users.user_login_id JOIN exams ON examenrollment.Exam_id = exams.id WHERE exams.teacherid=$_SESSION[teacher_login_id] ORDER BY examenrollment.result ASC,examenrollment.Exam_id ASC;";
                                 $result=mysqli_query($conn,$sql);
                                 if($result->num_rows > 0)
                                 {

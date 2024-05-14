@@ -3,7 +3,7 @@ session_start();
 //include database connection
 require '../database_connection.php';
 // user auth
-if (!isset($_SESSION['roleid']))
+if (!isset($_SESSION['teacher_login_id']))
 {
   header("Location: ../index.php?error=You Need To Login First");
   exit();
@@ -56,7 +56,7 @@ if(isset($_GET['delete'])){
     }
 }
 
-$userdata = "SELECT * FROM mcqsystem1.user WHERE roleid='" . $_SESSION['roleid'] . "'";
+$userdata = "SELECT * FROM exam.users WHERE id='" . $_SESSION['teacher_login_id'] . "'";
 $userresult = mysqli_query($conn, $userdata);
 
 if (!$userresult) {

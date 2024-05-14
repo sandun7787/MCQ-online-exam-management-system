@@ -1,17 +1,16 @@
 <?php 
 session_start();
-
-// Check if a user is already logged in and redirect them accordingly
-if (isset($_SESSION['roleid'])) {
-    if ($_SESSION['roleid'] == 1) {
-        header("Location: Teacher/Teacher_home.php");
-        exit();
-    } elseif ($_SESSION['roleid'] == 2) {
-        header("Location: student/Student_home.php");
-        exit();
-    }
+if (isset($_SESSION['teacher_login_id']))
+{
+  header("Location: Teacher/Teacher_home.php");
+  exit();
 }
-?>
+if(isset($_SESSION['student_login_id']))
+{
+  header("Location: student/Student_home.php");
+  exit();
+}
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

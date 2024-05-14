@@ -3,7 +3,7 @@
 require '../database_connection.php';
 session_start();
 //teacher auth
-if (!isset($_SESSION['roleid'])) {
+if (!isset($_SESSION['teacher_login_id'])) {
     header("Location: ../index.php?error=You Need To Login First");
     exit();
 }
@@ -15,7 +15,7 @@ if ($_POST['main_id'] == 0) {
     $examdate = $_POST['examdatetime'];
 
     $sql = "INSERT INTO `exams`( `name`, `dateandtime`, `duration`, `teacherid`, `status`) 
-    VALUES ('$ExamName','$examdate','$duration','$_SESSION[roleid]','draft')";
+    VALUES ('$ExamName','$examdate','$duration','$_SESSION[teacher_login_id]','draft')";
     $result = mysqli_query($conn, $sql);
     $ex_id = mysqli_insert_id($conn);
     if (isset($_POST['question'])) {
@@ -55,7 +55,7 @@ if ($_POST['main_id'] == 0) {
     $result = mysqli_query($conn, $sql);
     if (isset($_POST['question'])) {
         $data = $_POST['question'];
-        $sql = "SELECT * FROM mcqsystem.question where examid=$id";
+        $sql = "SELECT * FROM exam.question where examid=$id";
         $result = mysqli_query($conn, $sql);
         $rows = mysqli_num_rows($result);
 
