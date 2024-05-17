@@ -1,5 +1,6 @@
 MCQ-online-exam-management-system
-
+emails passwords
+1.student deshanstudent@gmail.com 1234567890 2.student sandunstudent@gmail.com 1234567890 3.Teacher hashiniteacher@gmail.com 1234567890 4.Teacher hashiniteacher@gmail.com 1234567890
 <img width="960" alt="Screenshot 2024-05-16 105724" src="https://github.com/sandun7787/MCQ-online-exam-management-system/assets/75010950/89362e94-036a-4a59-b707-50f97ad384bb">
 <img width="960" alt="2" src="https://github.com/sandun7787/MCQ-online-exam-management-system/assets/75010950/0faf6c96-2a5c-4ae6-87cb-f3e216f35d90">
 <img width="960" alt="3" src="https://github.com/sandun7787/MCQ-online-exam-management-system/assets/75010950/ac7ee8c7-0795-4321-9b9c-b97d0b66fc87">
